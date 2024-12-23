@@ -9,11 +9,7 @@ namespace AdventOfCode.Tests
 {
     public class Day5Tests
     {
-        [Fact]
-        public void TestPart1Simple()
-        {
-            // Arrange
-            var input = """
+        string input = """
                 47|53
                 97|13
                 97|61
@@ -44,6 +40,10 @@ namespace AdventOfCode.Tests
                 97,13,75,29,47
                 """;
 
+        [Fact]
+        public void TestPart1()
+        {
+            // Arrange
             var day5 = new Day5();
 
             // Act
@@ -51,6 +51,19 @@ namespace AdventOfCode.Tests
 
             // Assert
             Assert.Equal(143, result);
+        }
+
+        [Fact]
+        public void TestPart2()
+        {
+            // Arrange
+            var day5 = new Day5();
+
+            // Act
+            var result = day5.GetPart2Result(input);
+
+            // Assert
+            Assert.Equal(123, result);
         }
     }
 }

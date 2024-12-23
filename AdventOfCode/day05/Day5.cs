@@ -24,23 +24,81 @@ namespace AdventOfCode.day05
             return result;
         }
 
+        public int GetPart2Result(string? input = null)
+        {
+            int result = 0;
+
+            ParseInput(input ?? File.ReadAllText("..\\..\\..\\day05\\input.txt"));
+
+            foreach (var update in updates)
+            {
+                if (SortUpdate(update))
+                    result += update[update.Count / 2];
+            }
+
+            return result;
+        }
+
         bool UpdateInOrder(List<int> update)
         {
-            foreach (int number in update)
+            for (int i = 0; i < update.Count; i++)
             {
-                if (update.IndexOf(number) == update.Count - 1)
+                var number = update[i];
+                if (i == update.Count - 1)
                     return true;
                 if (!orders.ContainsKey(number))
                     return false;
 
-                foreach (var nextNumber in update.Skip(update.IndexOf(number) + 1))
+                for (int j = i + 1; j < update.Count; j++)
                 {
+                    var nextNumber = update[j];
                     if (!orders[number].Contains(nextNumber))
                         return false;
                 }
             }
 
             return true;
+        }
+
+        bool SortUpdate(List<int> update)
+        {
+            bool reordered = false;
+
+            for (int i = 0; i < update.Count; i++)
+            {
+                var number = update[i];
+                if (i == update.Count - 1)
+                    return reordered;
+                if (!orders.ContainsKey(number))
+                {
+                    if (!orders.ContainsKey(update[i + 1]))
+                        throw new Exception("This should not happen");
+                    else // probably a simpler solution would be to just move 'number' to the end
+                    {
+                        update[i] = update[i+1];
+                        update[i+1] = number;
+                        reordered = true;
+                        i--;
+                        continue;
+                    }
+                }
+
+                for (int j = i + 1; j < update.Count; j++)
+                {
+                    var nextNumber = update[j];
+                    
+                    if (!orders[number].Contains(nextNumber))
+                    {
+                        update[i] = nextNumber;
+                        update[j] = number;
+                        reordered = true;
+                        i--;
+                        break;
+                    }
+                }
+            }
+
+            return reordered;
         }
 
         public void ParseInput(string input)

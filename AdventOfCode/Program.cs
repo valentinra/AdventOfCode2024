@@ -7,7 +7,7 @@ namespace AdventOfCode
         static void Main()
         {
             Console.WriteLine("Result:");
-            var result = new Day5().GetPart1Result();
+            var result = new Day5().GetPart2Result();
             Console.WriteLine("Result: " + result);
         }
     }
