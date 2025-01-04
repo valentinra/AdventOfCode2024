@@ -1,4 +1,5 @@
 ﻿using AdventOfCode.day05;
+using AdventOfCode.day06;
 
 namespace AdventOfCode
 {
@@ -6,8 +7,7 @@ namespace AdventOfCode
     {
         static void Main()
         {
-            Console.WriteLine("Result:");
-            var result = new Day5().GetPart2Result();
+            var result = new Day6().GetPart2Result();
             Console.WriteLine("Result: " + result);
         }
     }
