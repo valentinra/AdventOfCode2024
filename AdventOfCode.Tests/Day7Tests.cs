@@ -49,7 +49,7 @@ namespace AdventOfCode.Tests
             var result = Day7.GetPart2Result(input);
 
             // Assert
-            Assert.Equal(6, result);
+            Assert.Equal(11387, result);
         }
     }
 }

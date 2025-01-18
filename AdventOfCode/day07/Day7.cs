@@ -25,7 +25,7 @@ namespace AdventOfCode.day07
 
             foreach (var line in numbersMapping)
             {
-                if (IsEquationPossible(line.Values, line.Left))
+                if (IsEquationPossible(line.Values, line.Left, [(x, y) => x + y, (x, y) => x * y]))
                 {
                     result += line.Left;
                 }
@@ -34,22 +34,22 @@ namespace AdventOfCode.day07
             return result;
         }
 
-        private bool IsEquationPossible(List<long> values, long target)
+        private bool IsEquationPossible(List<long> values, long target, Func<long, long, long>[] operators)
         {
             var isPossible = false;
 
             if (values.Count == 1)
                 return values[0] == target;
 
-            var newAddValue = values[0] + values[1];
-            isPossible = IsEquationPossible(GetNewList(values.Skip(2), newAddValue), target);
-            if (isPossible)
-                return isPossible;
+            foreach (var op in operators)
+            {
+                var newAddValue = op(values[0], values[1]);
+                isPossible = IsEquationPossible(GetNewList(values.Skip(2), newAddValue), target, operators);
+                if (isPossible)
+                    return isPossible;
+            }
 
-            var newMulValue = values[0] * values[1];
-            isPossible = IsEquationPossible(GetNewList(values.Skip(2), newMulValue), target);
-
-            return isPossible;
+            return false;
         }
 
         // get new list with elem inserted in the front
@@ -62,7 +62,19 @@ namespace AdventOfCode.day07
 
         public long GetPart2Result(string? input = null)
         {
-            throw new NotImplementedException();
+            long result = 0;
+
+            ParseInput(input ?? File.ReadAllText("..\\..\\..\\day07\\input.txt"));
+
+            foreach (var line in numbersMapping)
+            {
+                if (IsEquationPossible(line.Values, line.Left, [(x, y) => x + y, (x, y) => x * y, (x, y) => long.Parse($"{x}{y}")]))
+                {
+                    result += line.Left;
+                }
+            }
+
+            return result;
         }
 
         public void ParseInput(string input)
