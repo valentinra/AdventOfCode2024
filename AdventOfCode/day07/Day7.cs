@@ -17,7 +17,7 @@ namespace AdventOfCode.day07
     {
         readonly List<Line> numbersMapping = new();
 
-        public long GetPart1Result(string? input = null, bool parseInput = true)
+        public long GetPart1Result(string? input = null)
         {
             long result = 0;
 
