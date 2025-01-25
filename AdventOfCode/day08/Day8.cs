@@ -39,12 +39,12 @@ namespace AdventOfCode.day08
         public int GetPart1Result(string? input = null)
         {
             ParseInput(input ?? File.ReadAllText("..\\..\\..\\day08\\input.txt"));
-            var antis = GetAntiNodes(GetAntinodes1);
+            var antis = GetAllAntiNodes(GetAntinodesFromAntennas1);
 
             return antis.Distinct().Count();
         }
 
-        private List<Position> GetAntiNodes(Func<Position, Position, List<Position>> antinodesFromPositionsPair)
+        private List<Position> GetAllAntiNodes(Func<Position, Position, List<Position>> antinodesFromAntennas)
         {
             var antis = new List<Position>();
 
@@ -63,7 +63,7 @@ namespace AdventOfCode.day08
                             if (pairPosition.X == -1)
                                 break;
 
-                            var antiNodes = antinodesFromPositionsPair(new Position(i, j), pairPosition);
+                            var antiNodes = antinodesFromAntennas(new Position(i, j), pairPosition);
                             foreach (var antiNode in antiNodes)
                             {
                                 if (IsNodeValid(antiNode))
@@ -116,9 +116,10 @@ namespace AdventOfCode.day08
 
         public int GetPart2Result(string? input = null)
         {
+            ParseInput(input ?? File.ReadAllText("..\\..\\..\\day08\\input.txt"));
+            var antis = GetAllAntiNodes(GetAntinodesFromAntennas2);
 
-
-            return 0;
+            return antis.Distinct().Count();
         }
 
         public void ParseInput(string input)
@@ -147,7 +148,7 @@ namespace AdventOfCode.day08
             Console.WriteLine($"Parsed matrix. 1st dim = {mat.GetLength(0)}, 2nd dim={mat.GetLength(1)}");
         }
 
-        static List<Position> GetAntinodes1(Position antenna1, Position antenna2)
+        static List<Position> GetAntinodesFromAntennas1(Position antenna1, Position antenna2)
         {
             Position antinode1;
             Position antinode2;
@@ -159,6 +160,28 @@ namespace AdventOfCode.day08
             antinode2 = new Position(antenna2.X - diffX, antenna2.Y - diffY);
 
             return [antinode1, antinode2];
+        }
+
+        List<Position> GetAntinodesFromAntennas2(Position antenna1, Position antenna2)
+        {
+            var antiNodes = new List<Position>();
+            var diffX = antenna1.X - antenna2.X;
+            var diffY = antenna1.Y - antenna2.Y;
+
+            var current = antenna1;
+            while(IsNodeValid(current))
+            {
+                antiNodes.Add(current);
+                current = new Position(current.X + diffX, current.Y + diffY);
+            }
+            current = antenna2;
+            while (IsNodeValid(current))
+            {
+                antiNodes.Add(current);
+                current = new Position(current.X - diffX, current.Y - diffY);
+            }
+
+            return antiNodes;
         }
     }
 }
