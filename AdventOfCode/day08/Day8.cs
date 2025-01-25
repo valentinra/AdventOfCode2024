@@ -39,7 +39,13 @@ namespace AdventOfCode.day08
         public int GetPart1Result(string? input = null)
         {
             ParseInput(input ?? File.ReadAllText("..\\..\\..\\day08\\input.txt"));
+            var antis = GetAntiNodes(GetAntinodes1);
 
+            return antis.Distinct().Count();
+        }
+
+        private List<Position> GetAntiNodes(Func<Position, Position, List<Position>> antinodesFromPositionsPair)
+        {
             var antis = new List<Position>();
 
             char current = '.';
@@ -57,14 +63,13 @@ namespace AdventOfCode.day08
                             if (pairPosition.X == -1)
                                 break;
 
-                            var antiNodesPair = GetAntinodesPositions(new Position(i, j), pairPosition);
-                            if (IsNodeValid(antiNodesPair.Item1))
+                            var antiNodes = antinodesFromPositionsPair(new Position(i, j), pairPosition);
+                            foreach (var antiNode in antiNodes)
                             {
-                                antis.Add(antiNodesPair.Item1);
-                            }
-                            if (IsNodeValid(antiNodesPair.Item2))
-                            {
-                                antis.Add(antiNodesPair.Item2);
+                                if (IsNodeValid(antiNode))
+                                {
+                                    antis.Add(antiNode);
+                                }
                             }
 
                             startPosition = pairPosition;
@@ -73,7 +78,7 @@ namespace AdventOfCode.day08
                 }
             }
 
-            return antis.Distinct().Count();
+            return antis;
         }
 
         bool IsNodeValid(Position node)
@@ -109,9 +114,11 @@ namespace AdventOfCode.day08
             return new Position(-1, -1);
         }
 
-        public void GetPart2Result(string? input = null)
+        public int GetPart2Result(string? input = null)
         {
 
+
+            return 0;
         }
 
         public void ParseInput(string input)
@@ -140,7 +147,7 @@ namespace AdventOfCode.day08
             Console.WriteLine($"Parsed matrix. 1st dim = {mat.GetLength(0)}, 2nd dim={mat.GetLength(1)}");
         }
 
-        static Tuple<Position, Position> GetAntinodesPositions(Position antenna1, Position antenna2)
+        static List<Position> GetAntinodes1(Position antenna1, Position antenna2)
         {
             Position antinode1;
             Position antinode2;
@@ -151,7 +158,7 @@ namespace AdventOfCode.day08
             antinode1 = new Position(antenna1.X + diffX, antenna1.Y + diffY);
             antinode2 = new Position(antenna2.X - diffX, antenna2.Y - diffY);
 
-            return Tuple.Create(antinode1, antinode2);
+            return [antinode1, antinode2];
         }
     }
 }

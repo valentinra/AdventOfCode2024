@@ -49,10 +49,10 @@ namespace AdventOfCode.Tests
             var Day8 = new Day8();
 
             // Act
-            Day8.GetPart2Result(input);
+            var result = Day8.GetPart2Result(input);
 
             // Assert
-            //Assert.Equal(11387, result);
+            Assert.Equal(34, result);
         }
     }
 }
